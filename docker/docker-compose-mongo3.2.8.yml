@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+
+  mongodb:
+    image: mongo:3.2.8
+    command: --replSet rs0 --journal --smallfiles
+    ports:
+      - "27017:27017"
+
+  graphite:
+    image: hopsoft/graphite-statsd:latest
+    ports:
+      - "80:80"
+      - "2003-2004:2003-2004"
+      - "2023-2024:2023-2024"
+      - "8125:8125/udp"
+      - "8126:8126"
+    restart: always
+
+  mongo2statsd:
+    image: dongintercom/mongo2statsd:latest
+    depends_on:
+      - mongosetup
+      - graphite
+    links:
+      - mongodb
+      - graphite
+    command: --mongo-host=mongodb --statsd-host=graphite --metric-prefix=mongo3
+
+  mongosetup:
+    image: mongo:3.2.8
+    links:
+      - mongodb:mongodb
+    depends_on:
+      - mongodb
+    volumes:
+      - ./setup_replicaset.sh:/setup_replicaset.sh:ro
+    entrypoint: [ "/setup_replicaset.sh" ]
