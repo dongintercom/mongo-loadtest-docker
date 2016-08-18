@@ -80,6 +80,8 @@ def main():
   random.shuffle(load_test_argument_list)
 
   pool.map(run_loadtest, load_test_argument_list)
+  pool.close()
+  pool.join()
 
 if __name__ == "__main__":
   main()

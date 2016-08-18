@@ -1,0 +1,29 @@
+runner:
+  language: ruby
+  location: ./lib/ruby_agent/
+
+mongodb:
+  host: 192.168.99.101
+  port: 27017
+
+seed:
+  min_id: 1
+  max_id: 100000
+
+load_profile:
+  write:
+    num_processes: 20
+    num_requests: 10000
+    sleep: 0
+  read:
+    num_processes: 20
+    num_requests: 10000
+    sleep: 0
+  batchwrite:
+    num_processes: 0
+    num_requests: 0
+    sleep: 0
+  batchread:
+    num_processes: 0
+    num_requests: 0
+    sleep: 0
